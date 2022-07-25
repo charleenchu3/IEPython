@@ -134,10 +134,13 @@ print(queryFile.queryActionFunc())
 registerFile = ReadFile(FILEPATHS,"unCompressFile") #Does this need to be a dict? to store actions
 print(queryFile.registerActionFunc())
 
+#TODO#
+# update checkExpect to check for list of filePaths and maybe list of proposed actions?
+# add tests to check for queryAction and registerActions
 
 
 ##### UNIT TEST #####
-TESTDATA_FILEPATH = "TestData/testFolder/file2.zip"
+TESTDATA_FILEPATH = ["TestData/testFolder/file2.txt","TestData/testFolder/"] # NOT USED ATM
 def checkExpect(inputObj,inputAction,expectedVal):
     '''
     inputArg = ReadFile("TestData/file.txt",Action)
@@ -149,27 +152,27 @@ def checkExpect(inputObj,inputAction,expectedVal):
 
 '''
 #openFile
-checkExpect("TestData/file.txt","openFile",True) #normalFile
-checkExpect("TestData/testFolder","openFile",False) #folder
+checkExpect(["TestData/file.txt"],"openFile",True) #normalFile
+checkExpect(["TestData/testFolder"],"openFile",False) #folder
 
 #unCompressFile
-checkExpect("TestData/file.txt","unCompressFile",False) #normalFile
-checkExpect("TestData/compressedTF","unCompressFile",False) #normalFolder
-checkExpect("TestData/file2.zip","unCompressFile",True) #compressedFile
-checkExpect("TestData/compressedTF.tgz","unCompressFile",True) #compressedFolder with different .ext
+checkExpect(["TestData/file.txt"],"unCompressFile",False) #normalFile
+checkExpect(["TestData/compressedTF"],"unCompressFile",False) #normalFolder
+checkExpect(["TestData/file2.zip"],"unCompressFile",True) #compressedFile
+checkExpect(["TestData/compressedTF.tgz"],"unCompressFile",True) #compressedFolder with different .ext
 
 #convertFile
-checkExpect("TestData/testFolder/file3.txt","convertFile",False) #readOnlyFile
-checkExpect("TestData/testFolder/","convertFile",False) #folder
-checkExpect("TestData/testFolder/file.txt","convertFile",True) #normalFile in subFolder
+checkExpect(["TestData/testFolder/file3.txt"],"convertFile",False) #readOnlyFile
+checkExpect(["TestData/testFolder/"],"convertFile",False) #folder
+checkExpect(["TestData/testFolder/file.txt"],"convertFile",True) #normalFile in subFolder
 
 #deleteFile
-checkExpect("TestData/testFolder/file3.txt","deleteFile",False) #readOnlyFile
-checkExpect("TestData/testFolder","deleteFile",False) #folder
+checkExpect(["TestData/testFolder/file3.txt"],"deleteFile",False) #readOnlyFile
+checkExpect(["TestData/testFolder"],"deleteFile",False) #folder
 
 #printFile
-checkExpect("TestData/testFolder/file.txt","printFile",True) #normalFile
-checkExpect("TestData/testFolder","openFile",False) #folder
+checkExpect(["TestData/testFolder/file.txt"],"printFile",True) #normalFile
+checkExpect(["TestData/testFolder"],"openFile",False) #folder
 '''
 
 
