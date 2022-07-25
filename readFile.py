@@ -1,20 +1,6 @@
 import os
-'''
-def getFileDict(listOfFiles):
-    masterFileList = []
-    for filePath in listOfFiles:
-        fileList = []
-        if os.path.isdir(filePath):
-            fileList = [os.path.join(dirPath, file) for dirPath, dirName, filenames in os.walk(filePath) for file in filenames if os.path.splitext(file)[1] != '']
-        else:
-            fileList = [filePath]
-        masterFileList.append(fileList)
 
-    flatMasterList = [f for fl in masterFileList for f in fl]
-    print(flatMasterList)
-'''
-
-class readFile:
+class ReadFile:
     def __init__(self, filePaths, action=None):
         self.fileAllPaths = self.getAllPaths(filePaths) #list of paths
         self.actionType = action
@@ -126,16 +112,27 @@ class readFile:
             return self.actionDict
         except:
             return "Invalid File Type"
+    
+    def registerActionFunc(self): #TODO
+        '''
+        register the actions for the filePath
+        '''
+        # get self.actionDict and check if "proposed" actions are doable
+        # update(maybe create) and applyDict 
+        #return applyDict
+        pass
 
 
 #### create Class Objs to check file ####
 FILEPATH = ["TestData/testFolder/file2.txt"] #single paths
 FILEPATHS = ["TestData/testFolder/file2.txt","TestData/testFolder/"] # for multiple Paths
 #action opts: openFile, compressFile, unCompressFile, deleteFile, printFile
-myFile = readFile(FILEPATH,"unCompressFile") 
+#myFile = ReadFile(FILEPATH,"unCompressFile") 
 ##print(myFile.runFunc()) #result
-queryFile = readFile(FILEPATHS,False)
+queryFile = ReadFile(FILEPATHS,False)
 print(queryFile.queryActionFunc())
+registerFile = ReadFile(FILEPATHS,"unCompressFile") #Does this need to be a dict? to store actions
+print(queryFile.registerActionFunc())
 
 
 
@@ -143,9 +140,9 @@ print(queryFile.queryActionFunc())
 TESTDATA_FILEPATH = "TestData/testFolder/file2.zip"
 def checkExpect(inputObj,inputAction,expectedVal):
     '''
-    inputArg = readFile("TestData/file.txt",Action)
+    inputArg = ReadFile("TestData/file.txt",Action)
     '''
-    if readFile(inputObj,inputAction).runFunc() == expectedVal:
+    if ReadFile(inputObj,inputAction).runFunc() == expectedVal:
         print("<PASS> %s: %s" % (inputAction,inputObj))
     else:
         print("<FAIL> %s: %s" % (inputAction,inputObj))
