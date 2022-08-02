@@ -14,7 +14,7 @@ def checkExpect(inputObj,inputAction, expectedVal):
 
 
 ### checkExpect ####
-
+'''
 #openFile
 checkExpect(dom.DataOperation(["TestData/testFolder"],"openFile").checkExpectFunc(["TestData/testFolder"],"openFile"),"openFile",False) #folder
 checkExpect(dom.DataOperation(["TestData/testFolder/file2.txt"],"openFile").checkExpectFunc(["TestData/testFolder/file2.txt"],"openFile"),"openFile",True) #folder))
@@ -48,4 +48,4 @@ checkExpect(dom.DataOperation([("TestData/testFolder",'openFile')]).registerActi
 checkExpect(dom.DataOperation([("TestData/testFolder/file.txt",'deleteFile')]).registerAction([("TestData/testFolder/file.txt",'deleteFile')]),"registerAction",{'TestData/testFolder/file.txt':"deleteFile"})
 checkExpect(dom.DataOperation(["TestData/testFolder","TestData/testFolder/file.txt"]).registerAction(["TestData/testFolder","TestData/testFolder/file.txt"],"deleteFile"),"registerAction",{'TestData/testFolder':"N/A",'TestData/testFolder/file.txt':'deleteFile'})
 checkExpect(dom.DataOperation(["TestData/testFolder","TestData/testFolder/file.txt"]).registerAction(["TestData/testFolder","TestData/testFolder/file.txt"],"deleteFile",recurse=True),"registerAction",{'TestData/testFolder/file2.txt.zip': 'deleteFile', 'TestData/testFolder/file2.txt': 'deleteFile', 'TestData/testFolder/file.txt': 'deleteFile', 'TestData/testFolder/file3.txt': 'N/A', 'TestData/testFolder/file3.zip': 'deleteFile'})
-
+'''
