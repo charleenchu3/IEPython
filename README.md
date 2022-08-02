@@ -1,4 +1,4 @@
-# ImageEnginePython- Python Skill Exercise
+# Python Skill Exercise
 Author: Charleen Chu
 
 This module allows user to query and perform actions to files/folders.
