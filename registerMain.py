@@ -17,7 +17,12 @@ class Registry:
         get all path that matches user search
         '''
         testDir = "%s/TestData/" % os.getcwd() #temp for testing
+        if not glob.glob(testDir + self.keyword):
+            print("files not found.")
+
         return glob.glob(testDir + self.keyword)
+
+            
 
         
     def getFileInfo(self):
@@ -107,11 +112,12 @@ class Registry:
         '''
         for filePath in self.filePathList:
             if self.validateOp(filePath):
-                print("success:{}for{}".format(self.actionType,filePath))
+                print("success:{} for {}".format(self.actionType,filePath))
             else:
-                print("fail:{}for{}".format(self.actionType,filePath))
+                print("fail:{} for {}".format(self.actionType,filePath))
                 
 ########## EXAMPLES ##########
+
 print("\n## fetchOp() ##")
 Registry("TestData/testFolder/file.txt","openFile").fetchOp() # TestData/testFolder/file.txt available for expandFile
 Registry("TestData/testFolder/","openFile").fetchOp() # TestData/testFolder/ NOT available for openFile
@@ -144,3 +150,4 @@ Registry("*","printFile").registerOp()
 # fail:printFilefor/Users/charleenchu/Desktop/tmpDev/IEPython/TestData/compressedTF
 # success:printFile for /Users/charleenchu/Desktop/tmpDev/IEPython/TestData/file2.zip
 # success:printFile for /Users/charleenchu/Desktop/tmpDev/IEPython/TestData/compressedTF.tgz
+
