@@ -1,12 +1,8 @@
 import os
-from unitTest import checkExpect
-import utilMod
 import glob
-import unitTest
 
 class Registry:
     def __init__(self, keyWord, action=None):
-        
         if os.path.exists(keyWord):
             self.filePathList = [keyWord] 
         else:
@@ -18,11 +14,9 @@ class Registry:
 
     def getAllPaths(self):
         '''
-        take in list of paths, and cursively g
+        get all path that matches user search
         '''
         testDir = "%s/TestData/" % os.getcwd() #temp for testing
-
-        #print(glob.glob(testDir+ self.keyword))
         return glob.glob(testDir + self.keyword)
 
         
@@ -36,20 +30,20 @@ class Registry:
                 # for files ONLY
                 fileExt = os.path.splitext(filePath)[1] 
                 fileMode = oct(os.stat(filePath).st_mode)[-3:] #444 == readOnly
-                tempDict[filePath] = {"printFile": os.path.exists(filePath),
-                                    "expandFile":self.isCompressed(filePath), # can only unCompressed a compressedObj
-                                    "convertFile":self.isConvertable(fileExt,fileMode), # check for access permission and fileExt
-                                    "openFile":not(self.isCompressed(filePath)),# can only open non-compressed file
-                                    "deleteFile":self.isDeletable(fileExt,fileMode) # same as isConvertable() for now, since we might adjust it later on to make it more specific
-                                    }
+                tempDict[filePath] = { "printFile":os.path.exists(filePath),
+                                       "expandFile":self.isCompressed(filePath), # can only unCompressed a compressedObj
+                                       "convertFile":self.isConvertable(fileExt,fileMode), # check for access permission and fileExt
+                                       "openFile":not(self.isCompressed(filePath)),# can only open non-compressed file
+                                       "deleteFile":self.isDeletable(fileExt,fileMode) # same as isConvertable() for now, since we might adjust it later on to make it more specific
+                                      }
             except:
                 # for folders and invalid filepath 
                 tempDict[filePath] = { "printFile":False,
-                                    "expandFile":False,
-                                    "convertFile":False,
-                                    "openFile":False,
-                                    "deleteFile":False
-                                    }  
+                                       "expandFile":False,
+                                       "convertFile":False,
+                                       "openFile":False,
+                                       "deleteFile":False
+                                     }  
 
         return tempDict
 
@@ -93,14 +87,13 @@ class Registry:
 ###########################################
     def validateOp(self,filePath):
         '''
-        return True if operation available, else return False
+        return True if operation is available, else return False
         '''
         return self.actionDict[filePath][self.actionType]
 
-
     def fetchOp(self):
         '''
-        fetch result if given operation is available for the file
+        print result if given operation is available for the file
         '''
         for filePath in self.filePathList:
             if self.validateOp(filePath):
@@ -108,34 +101,17 @@ class Registry:
             else:
                 print("{} NOT available for {}".format(filePath, self.actionType))
                 
-
     def registerOp(self):
         '''
-        register operations
+        print result of whether register operations is successful
         '''
         for filePath in self.filePathList:
             if self.validateOp(filePath):
-                self.run(filePath)
+                print("success:{}for{}".format(self.actionType,filePath))
             else:
-                print("action fail")
+                print("fail:{}for{}".format(self.actionType,filePath))
                 
-    def run(self,filePath):
-        if self.actionType == "deleteFile":
-            utilMod.deleteFile(filePath)
-        elif self.actionType == "openFile":
-            utilMod.openFile(filePath)
-        elif self.actionType == "compressFile":
-            utilMod.compressFile(filePath)   
-        elif self.actionType == "expandFile":
-            utilMod.expandFile(filePath)
-        elif self.actionType == "printFile":
-            utilMod.printFile(filePath)             
-
-
-
-
 ########## EXAMPLES ##########
-
 print("\n## fetchOp() ##")
 Registry("TestData/testFolder/file.txt","openFile").fetchOp() # TestData/testFolder/file.txt available for expandFile
 Registry("TestData/testFolder/","openFile").fetchOp() # TestData/testFolder/ NOT available for openFile
@@ -153,19 +129,18 @@ Registry("*","printFile").fetchOp()
 # /Users/charleenchu/Desktop/tmpDev/IEPython/TestData/compressedTF.tgz available for printFile
 
 
-
 print("\n## registerOp() ##")
-Registry("TestData/testFolder/","openFile").registerOp() # action fail
-Registry("TestData/testFolder/file2.txt","openFile").registerOp() # openFile:TestData/testFolder/file2.txt
-Registry("TestData/compressedTF.tgz","openFile").registerOp() # action fail
-Registry("TestData/compressedTF.tgz","expandFile").registerOp() # expandFile:TestData/compressedTF.tgz
+Registry("TestData/testFolder/","openFile").registerOp() # fail:openFile for TestData/testFolder/
+Registry("TestData/testFolder/file2.txt","openFile").registerOp() # success:openFile for TestData/testFolder/file2.txt
+Registry("TestData/compressedTF.tgz","openFile").registerOp() # fail:openFile for TestData/compressedTF.tgz
+Registry("TestData/compressedTF.tgz","expandFile").registerOp() # success:expandFile for TestData/compressedTF.tgz
 
-Registry("*.txt","expandFile").registerOp() # action fail
-Registry("*.zip","expandFile").registerOp() # expandFile:/Users/charleenchu/Desktop/tmpDev/IEPython/TestData/file2.zip
+Registry("*.txt","expandFile").registerOp() # fail:expandFile for /Users/charleenchu/Desktop/tmpDev/IEPython/TestData/file.txt
+Registry("*.zip","expandFile").registerOp() # success:expandFile for /Users/charleenchu/Desktop/tmpDev/IEPython/TestData/file2.zip
 Registry("*","printFile").registerOp() 
-# printFile:/Users/charleenchu/Desktop/tmpDev/IEPython/TestData/file.txt
-# action fail
-# action fail
-# action fail
-# printFile:/Users/charleenchu/Desktop/tmpDev/IEPython/TestData/file2.zip
-# printFile:/Users/charleenchu/Desktop/tmpDev/IEPython/TestData/compressedTF.tgz
+# success:printFile for /Users/charleenchu/Desktop/tmpDev/IEPython/TestData/file.txt
+# fail:printFilefor/Users/charleenchu/Desktop/tmpDev/IEPython/TestData/testFolder
+# fail:printFilefor/Users/charleenchu/Desktop/tmpDev/IEPython/TestData/recurseFolder
+# fail:printFilefor/Users/charleenchu/Desktop/tmpDev/IEPython/TestData/compressedTF
+# success:printFile for /Users/charleenchu/Desktop/tmpDev/IEPython/TestData/file2.zip
+# success:printFile for /Users/charleenchu/Desktop/tmpDev/IEPython/TestData/compressedTF.tgz
