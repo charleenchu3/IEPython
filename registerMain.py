@@ -22,9 +22,6 @@ class Registry:
 
         return glob.glob(testDir + self.keyword)
 
-            
-
-        
     def getFileInfo(self):
         '''
         return: dictionary of all files with their action options 
@@ -59,6 +56,7 @@ class Registry:
         '''
         if fileMode == "444": #readOnly
             return True
+
         return False
 
     def isCompressed(self,myFile):
@@ -69,6 +67,7 @@ class Registry:
             try:
                 f.read()
                 return False
+
             except:
                 return True
     
@@ -78,6 +77,7 @@ class Registry:
         '''
         if fileExt and not self.isReadOnly(fileMode):
             return True
+
         return False
     
     def isDeletable(self,fileExt,fileMode):
@@ -86,10 +86,10 @@ class Registry:
         '''
         if fileExt and not self.isReadOnly(fileMode):
             return True
+            
         return False
 
-
-###########################################
+##############################
     def validateOp(self,filePath):
         '''
         return True if operation is available, else return False
@@ -117,7 +117,6 @@ class Registry:
                 print("fail:{} for {}".format(self.actionType,filePath))
                 
 ########## EXAMPLES ##########
-
 print("\n## fetchOp() ##")
 Registry("TestData/testFolder/file.txt","openFile").fetchOp() # TestData/testFolder/file.txt available for expandFile
 Registry("TestData/testFolder/","openFile").fetchOp() # TestData/testFolder/ NOT available for openFile
