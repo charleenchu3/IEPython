@@ -128,7 +128,7 @@ class DataOperation:
             except:
                 outputDict[file] = "N/A" # action invalid
         
-        self.runActions(outputDict) 
+        #self.runActions(outputDict) 
         return outputDict
 
     def processList(self,filePath,globalAction,recurse):
